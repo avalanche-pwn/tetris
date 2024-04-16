@@ -1,0 +1,40 @@
+{
+  "version": 1,
+  "author": "Uri Shaked",
+  "editor": "wokwi",
+  "parts": [
+    {
+      "type": "wokwi-pi-pico",
+      "id": "pico",
+      "top": 73.9,
+      "left": 132.55,
+      "rotate": 90,
+      "attrs": { "env": "arduino-community" }
+    },
+    { "type": "wokwi-logic-analyzer", "id": "logic1", "top": -100, "left": 38.4, "attrs": {}, "rotate": 270 },
+    {
+      "type": "wokwi-max7219-matrix",
+      "id": "matrix1",
+      "top": 250,
+      "left": -79.5,
+      "attrs": { "chain": "1", "layout": "fc16" }
+    }
+  ],
+  "connections": [
+    [ "pico:GP0", "$serialMonitor:RX", "", [] ], 
+    [ "pico:GP1", "$serialMonitor:TX", "", [] ],
+    [ "pico:GP18", "matrix1:CLK", "green", [ "v0" ] ],
+    [ "pico:GP17","matrix1:CS", "green", [ "v0" ] ],
+    [ "pico:GP16","matrix1:DIN", "green", [ "v0" ] ],
+    [ "pico:3V3","matrix1:V+", "red", [ "v0" ] ],
+    [ "pico:GND.8","matrix1:GND", "black", [ "v0" ] ],
+    [ "logic1:D0", "pico:GP16", "orange", [ "v0" ] ],
+    [ "logic1:D1", "pico:GP17", "orange", [ "v0" ] ],
+    [ "logic1:D2", "pico:GP18", "orange", [ "v0" ] ],
+    [ "logic1:D3", "pico:GP19", "orange", [ "v0" ] ],
+    [ "logic1:D4", "pico:GP20", "orange", [ "v0" ] ],
+    [ "logic1:D5", "pico:GP21", "orange", [ "v0" ] ],
+    [ "logic1:D6", "pico:GP22", "orange", [ "v0" ] ],
+    [ "logic1:D7", "pico:GP26", "orange", [ "v0" ] ]
+  ]
+}
