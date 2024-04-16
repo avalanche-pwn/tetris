@@ -4,48 +4,51 @@
  * SPDX-License-Identifier: BSD-3-Clause
  */
 
+#include "display.h"
 #include "pico/stdlib.h"
 #include <stdio.h>
 
 extern void my_main();
+uint16_t map[32] = {
+    0b0000000000000000,
+    0b0000000000000000,
+    0b0000000000000000,
+    0b0000000000000000,
+    0b0000000000000000,
+    0b0000000000000000,
+    0b0000000000000000,
+    0b0000000000000000,
+    0b0000000000000000,
+    0b0000000000000000,
+    0b0000000000000000,
+    0b0000000000000000,
+    0b0000000000000000,
+    0b0001111111111100,
+    0b0010000100000000,
+    0b0010000100000000,
+    0b0001111111111100,
+    0b0000000000000000,
+    0b0001111000000000,
+    0b0010000100000000,
+    0b0010000100000000,
+    0b0011111111111100,
+    0b0000000000000000,
+    0b0011111111111000,
+    0b0000000000000100,
+    0b0000000000000100,
+    0b0011111111111000,
+    0b0000000000000000,
+    0b0001111111111000,
+    0b0010000000000100,
+    0b0010000000000100,
+    0b0011111111111100,
+};
 
 int main() {
-  const uint OE = 16;
-  const uint A = 17;
-  const uint B = 18;
-  const uint CLK = 21;
-  const uint LATCH = 22;
-  const uint R = 26;
-  gpio_init(OE);
-  gpio_init(A);
-  gpio_init(B);
-  gpio_init(CLK);
-  gpio_init(LATCH);
-  gpio_init(R);
-  gpio_set_dir(OE, GPIO_OUT);
-  gpio_set_dir(A, GPIO_OUT);
-  gpio_set_dir(B, GPIO_OUT);
-  gpio_set_dir(CLK, GPIO_OUT);
-  gpio_set_dir(LATCH, GPIO_OUT);
-  gpio_set_dir(R, GPIO_OUT);
+  display d = {
+      .oe = 16, .a = 17, .b = 18, .clk = 21, .latch = 22, .r = 26, .map = map};
 
-  gpio_put(OE, 1);
-  int d = 1;
-  while (true) {
-    gpio_put(B, d & 2);
-    gpio_put(A, d & 1);
-    for (int i = 0; i < 16; i++) {
-      gpio_put(CLK, 1);
-      sleep_ms(3);
-      gpio_put(R, 1);
-      gpio_put(CLK, 0);
-      gpio_put(R, 0);
-      sleep_ms(3);
-    }
-    gpio_put(LATCH, 1);
-    sleep_ms(3);
-    gpio_put(LATCH, 0);
-    sleep_ms(3);
-    d = (d + 1) % 4 + 0;
-  }
+  init_display(&d);
+  send_4by8(&d, 0, 24);
+  latch(&d);
 }

@@ -25,7 +25,7 @@ pico_sdk_init()
 
 # Add executable. Default name is the project name, version 0.1
 
-add_executable(tetris main.c)
+add_executable(tetris main.c display.c)
 
 pico_set_program_name(tetris "tetris")
 pico_set_program_version(tetris "0.1")
