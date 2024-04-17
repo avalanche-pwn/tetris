@@ -20,4 +20,5 @@ typedef struct {
 
 void init_display(display *d);
 void send_4by8(display *d, uint8_t x, uint8_t y);
+void send_16by32(display *d);
 void latch(display *d);

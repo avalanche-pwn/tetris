@@ -49,6 +49,8 @@ int main() {
       .oe = 16, .a = 17, .b = 18, .clk = 21, .latch = 22, .r = 26, .map = map};
 
   init_display(&d);
-  send_4by8(&d, 0, 24);
-  latch(&d);
+  while (true) {
+    send_16by32(&d);
+    latch(&d);
+  }
 }

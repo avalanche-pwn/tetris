@@ -28,8 +28,16 @@ void send_4by8(display *d, uint8_t x, uint8_t y) {
       gpio_put(d->r, 0);
       sleep_ms(3);
     }
-    mask>>=1;
+    mask >>= 1;
     mod_counter = (mod_counter + 1) % 4;
+  }
+}
+
+void send_16by32(display *d) {
+  for (int y = 32 - 8; y >= 0; y -= 8) {
+    for (int x = 16 - 4; x >= 0; x -= 4) {
+      send_4by8(d, x, y);
+    }
   }
 }
 
