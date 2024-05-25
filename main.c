@@ -5,10 +5,14 @@
  */
 
 #include "display.h"
+#include "pico/stdio.h"
 #include "pico/stdlib.h"
 #include <stdio.h>
 
-extern void my_main();
+extern void initUart();
+extern void serial_write(uint8_t a);
+extern void serial_flush();
+
 uint16_t map[32] = {
     0b0000000000000000,
     0b0000000000000000,
@@ -45,12 +49,13 @@ uint16_t map[32] = {
 };
 
 int main() {
-  display d = {
-      .oe = 16, .a = 17, .b = 18, .clk = 21, .latch = 22, .r = 26, .map = map};
-
-  init_display(&d);
-  while (true) {
-    send_16by32(&d);
-    latch(&d);
+  initUart();
+  //
+  //stdio_uart_init();
+  for (;;){
+    serial_write('a');
+    serial_write('\n');
+    serial_flush();
+    // puts("s");
   }
 }

@@ -2,3 +2,5 @@
 version = 1
 firmware = "build/tetris.uf2"
 elf = "build/tetris.elf"
+rfc2217ServerPort = 4000
+gdbServerPort=3333

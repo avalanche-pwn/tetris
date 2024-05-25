@@ -35,6 +35,8 @@
     [ "logic1:D4", "pico:GP20", "orange", [ "v0" ] ],
     [ "logic1:D5", "pico:GP21", "orange", [ "v0" ] ],
     [ "logic1:D6", "pico:GP22", "orange", [ "v0" ] ],
-    [ "logic1:D7", "pico:GP26", "orange", [ "v0" ] ]
+    [ "logic1:D7", "pico:GP26", "orange", [ "v0" ] ],
+    [ "$serialMonitor:RX", "pico:GP0", "", [] ],
+    [ "$serialMonitor:TX", "pico:GP1", "", [] ]
   ]
 }
