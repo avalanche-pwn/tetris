@@ -1,3 +1,4 @@
+#include "defs.S"
 .syntax unified
 .cpu cortex-m0plus
 .thumb
@@ -5,18 +6,13 @@
 .equ SET, 0x2000
 .equ CLEAR, 0x3000
 
+.equ TETRIMONE_SIZE, tetrimone_j-tetrimone_i
+
 .equ ROSC_BASE, 0x40060000
 .equ ROSC_CTRL, ROSC_BASE + 0
 .equ ROSC_CTRL_SET, ROSC_CTRL + SET
 .equ ROSC_RANDOMBIT, ROSC_BASE + 0x1c
 
-.equ TETRIMONE_MATRIX, 0
-.equ TETRIMONE_X, 8
-.equ TETRIMONE_Y, 9
-.equ TETRIMONE_WIDTH, 10
-.equ TETRIMONE_SIZE, tetrimone_j-tetrimone_i
-.equ SWAP_NUM, 2
-.equ MATRIX_SIZE, TETRIMONE_X
 .section .data
 tetrimone_arr:
 tetrimone_i: 
@@ -80,6 +76,7 @@ swap_tetrimone:
 .global rotate_left
 .global shift_right
 .global shift_left
+.global sift_down
 .section .text
 _swap_reset:
     eors r2, r2
@@ -314,8 +311,8 @@ _shift_left_loop_start:
     pop {r0-r3, pc}
 
 sift_down:
-    push {r0-r1, lr}
+    push {r1, lr}
     ldrb r1, [r0, #TETRIMONE_Y]
     adds r1, 1
     strb r1, [r0, #TETRIMONE_Y]
-    pop {r0-r1, pc}
+    pop {r1, pc}

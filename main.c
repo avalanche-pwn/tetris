@@ -18,21 +18,23 @@ extern uint8_t *get_tetrimone();
 extern uint8_t *rotate_left(uint8_t *tetrimone);
 extern void shift_left(uint8_t *tetrimone);
 extern void shift_right(uint8_t *tetrimone);
+extern void sift_down(uint8_t *tetrimone);
+extern void display(uint8_t *tetrimone);
 
 
 
 int main() {
   initUart();
+  //
   //stdio_uart_init();
   uint8_t *t = get_tetrimone();
   t = rotate_left(t);
   shift_left(t);
+  sift_down(t);
   for(;;) {
-    for (int i = 0; i < 16; i++){
-      serial_write(t[i]);
-      // puts("s");
-    }
+    display(t);
     serial_write('\n');
     serial_flush();
+    // puts("s");
   }
 }

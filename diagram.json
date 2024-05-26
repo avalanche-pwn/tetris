@@ -11,7 +11,6 @@
       "rotate": 90,
       "attrs": { "env": "arduino-community" }
     },
-    { "type": "wokwi-logic-analyzer", "id": "logic1", "top": -100, "left": 38.4, "attrs": {}, "rotate": 270 },
     {
       "type": "wokwi-max7219-matrix",
       "id": "matrix1",
@@ -28,14 +27,6 @@
     [ "pico:GP16","matrix1:DIN", "green", [ "v0" ] ],
     [ "pico:3V3","matrix1:V+", "red", [ "v0" ] ],
     [ "pico:GND.8","matrix1:GND", "black", [ "v0" ] ],
-    [ "logic1:D0", "pico:GP16", "orange", [ "v0" ] ],
-    [ "logic1:D1", "pico:GP17", "orange", [ "v0" ] ],
-    [ "logic1:D2", "pico:GP18", "orange", [ "v0" ] ],
-    [ "logic1:D3", "pico:GP19", "orange", [ "v0" ] ],
-    [ "logic1:D4", "pico:GP20", "orange", [ "v0" ] ],
-    [ "logic1:D5", "pico:GP21", "orange", [ "v0" ] ],
-    [ "logic1:D6", "pico:GP22", "orange", [ "v0" ] ],
-    [ "logic1:D7", "pico:GP26", "orange", [ "v0" ] ],
     [ "$serialMonitor:RX", "pico:GP0", "", [] ],
     [ "$serialMonitor:TX", "pico:GP1", "", [] ]
   ]

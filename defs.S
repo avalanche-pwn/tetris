@@ -1,0 +1,7 @@
+.section .data
+.equ TETRIMONE_MATRIX, 0
+.equ TETRIMONE_X, 8
+.equ TETRIMONE_Y, 9
+.equ TETRIMONE_WIDTH, 10
+.equ SWAP_NUM, 2
+.equ MATRIX_SIZE, TETRIMONE_X
