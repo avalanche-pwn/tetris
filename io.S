@@ -1,7 +1,7 @@
 .syntax unified
 .cpu cortex-m0plus
 .thumb
-.section .text
+.section .data
 .global uart_init2
 .global serial_init
 .global serial_write

@@ -12,50 +12,27 @@
 extern void initUart();
 extern void serial_write(uint8_t a);
 extern void serial_flush();
+extern uint8_t get_random();
+extern void enable_rosc();
+extern uint8_t *get_tetrimone();
+extern uint8_t *rotate_left(uint8_t *tetrimone);
+extern void shift_left(uint8_t *tetrimone);
+extern void shift_right(uint8_t *tetrimone);
 
-uint16_t map[32] = {
-    0b0000000000000000,
-    0b0000000000000000,
-    0b0000000000000000,
-    0b0000000000000000,
-    0b0000000000000000,
-    0b0000000000000000,
-    0b0000000000000000,
-    0b0000000000000000,
-    0b0000000000000000,
-    0b0000000000000000,
-    0b0000000000000000,
-    0b0000000000000000,
-    0b0000000000000000,
-    0b0001111111111100,
-    0b0010000100000000,
-    0b0010000100000000,
-    0b0001111111111100,
-    0b0000000000000000,
-    0b0001111000000000,
-    0b0010000100000000,
-    0b0010000100000000,
-    0b0011111111111100,
-    0b0000000000000000,
-    0b0011111111111000,
-    0b0000000000000100,
-    0b0000000000000100,
-    0b0011111111111000,
-    0b0000000000000000,
-    0b0001111111111000,
-    0b0010000000000100,
-    0b0010000000000100,
-    0b0011111111111100,
-};
+
 
 int main() {
   initUart();
-  //
   //stdio_uart_init();
-  for (;;){
-    serial_write('a');
+  uint8_t *t = get_tetrimone();
+  t = rotate_left(t);
+  shift_left(t);
+  for(;;) {
+    for (int i = 0; i < 16; i++){
+      serial_write(t[i]);
+      // puts("s");
+    }
     serial_write('\n');
     serial_flush();
-    // puts("s");
   }
 }
