@@ -64,6 +64,7 @@ _display_loop:
     lsrs r0, #1
     bl serial_write
     adds r1, #4
-    cmp r1, #(MAP_SIZE)
+    @substract 8 to ignore bottom border
+    cmp r1, #(MAP_SIZE - 8)
     blt _display_loop
     pop {r1-r3, pc}

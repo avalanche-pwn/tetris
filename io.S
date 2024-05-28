@@ -66,7 +66,7 @@ setupClocks:
     ldr r0, =XOSC_CTRL
     ldr r1, =0xFAB000   @ Enable magic word
     movs r2, #0x20
-    lsls r2, #2
+    lsls r2, #8
     orrs r0, r0, r2 @ SET bit
     str r1, [r0]
 
@@ -151,30 +151,27 @@ wait_uart_reset:
 
     pop {r0-r2, pc}
 
-@ configUart function
+@ configUart functionf
 configUart:
     push {r0-r2, lr}
 
     ldr r0, =UART0_UARTIBRD
-    movs r1, #(48000000 / (16 * UART_BAUD))
+    movs r1, #78
     str r1, [r0]
 
     ldr r0, =UART0_UARTFBRD
-    movs r1, #((48000000 * 64) / (16 * UART_BAUD)) & 0x3F
+    movs r1, #8
     str r1, [r0]
 
     ldr r0, =UART0_UARTLCR_H
-    movs r1, #0x70      @ 8-bit word length, 1 stop bit, no parity
+    movs r1, #(( 0x3 << 5 ) | ( 1 << 4 ))     @ 8-bit word length, 1 stop bit, no parity
     str r1, [r0]
 
     ldr r0, =UART0_UARTCR
-    movs r1, 1  @ UART Enable
-    lsls r1, #9
-    movs r2, 1
-    lsls r2, 8
-    orrs r1, r1, r2   @ TX Enable
-    movs r2, 1
-    orrs r1, r1,  r2   @ RX Enable
+    movs r1, #192
+    lsls r1, #2
+    movs r2, #( 1 << 0 ) @ UART Enable
+    orrs r1, r2
     str r1, [r0]
 
     pop {r0-r2, pc}
@@ -211,10 +208,18 @@ initUart:
 serial_write:
     push {r0-r1, lr}
 
+_serial_write_wait:
+    ldr r0, =UART_FR
+    ldr r1, [r0]
+    movs r2, #32
+    ands r1, r2 @ Check TXFE bit
+    cmp r1, #0
+    bne _serial_write_wait
+    pop {r0}
     ldr r1, =UART_DR
     str r0, [r1]
 
-    pop {r0-r1, pc}
+    pop {r1, pc}
 
 serial_read:
     push {r0-r1, lr}
