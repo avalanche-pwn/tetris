@@ -206,7 +206,7 @@ initUart:
     pop {r0-r1, pc}
 
 serial_write:
-    push {r0-r1, lr}
+    push {r0-r2, lr}
 
 _serial_write_wait:
     ldr r0, =UART_FR
@@ -219,7 +219,7 @@ _serial_write_wait:
     ldr r1, =UART_DR
     str r0, [r1]
 
-    pop {r1, pc}
+    pop {r1-r2, pc}
 
 serial_read:
     push {r0-r1, lr}
