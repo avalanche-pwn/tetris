@@ -3,4 +3,7 @@ build/*
 .cache/*
 venv/*
 rough_display.py
+.gdb_history
+.gdbinit
+
 

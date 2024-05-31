@@ -24,14 +24,13 @@ apply:
     @r1 - 2x tetrimone_width
     adds r2, r1
     lsls r2, #2
-    lsls r1, #1
+    lsls r1, #2
     adds r0, #TETRIMONE_MATRIX
 _apply_loop:
-    subs r1, #2
+    subs r1, #4
     subs r2, #4
     @r3 - current tetrimone row
-    ldrh r3, [r0, r1]
-    lsls r3, #1         @shift current row to align with the row in map which has 1 representing border as first and last bit
+    ldr r3, [r0, r1]
     @r4 - map addr
     ldr r4, =map
     @r5 - current map row
@@ -52,14 +51,13 @@ deapply:
     @r1 - 2x tetrimone_width
     adds r2, r1
     lsls r2, #2
-    lsls r1, #1
+    lsls r1, #2
     adds r0, #TETRIMONE_MATRIX
 _deapply_loop:
-    subs r1, #2
+    subs r1, #4
     subs r2, #4
     @r3 - current tetrimone row
-    ldrh r3, [r0, r1]
-    lsls r3, #1         @shift current row to align with the row in map which has 1 representing border as first and last bit
+    ldr r3, [r0, r1]
     @r4 - map addr
     ldr r4, =map
     @r5 - current map row

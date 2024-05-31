@@ -38,11 +38,11 @@ tetrimone_l:
 .byte 12, 0, 3
 .balign 4
 tetrimone_o: 
-.4byte 0b01100
-.4byte 0b01100
+.4byte 0b11000
+.4byte 0b11000
 .4byte 0b00000
 .4byte 0b00000
-.byte 12, 0, 4
+.byte 12, 0, 2
 .balign 4
 tetrimone_s: 
 .4byte 0b01100
@@ -161,7 +161,7 @@ clear_tetrimone:
     eors r3, r3
 _clear_tetrimone_loop:
     subs r1, r1, #1
-    lsls r2, r1, #1
+    lsls r2, r1, #2
     str r3, [r0, r2]
     cmp r1, #0
     bne _clear_tetrimone_loop
@@ -196,7 +196,7 @@ _rotate_right_inner_loop:
     @r5 tetrimone x
     ldrb r5, [r1, #TETRIMONE_X]
     @r4 shift value
-    movs r4, #17
+    movs r4, #16
     subs r4, r3
     subs r4, r5
     @r5 bit value
@@ -254,7 +254,7 @@ _rotate_left_inner_loop:
     @r5 tetrimone x
     ldrb r5, [r1, #TETRIMONE_X]
     @r4 shift value
-    movs r4, #16
+    movs r4, #15
     subs r4, r5
     @r5 bit value
     movs r5, #(1 << 1)
