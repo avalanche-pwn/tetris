@@ -14,58 +14,67 @@
 .equ ROSC_RANDOMBIT, ROSC_BASE + 0x1c
 
 .section .data
+.balign 4
 tetrimone_arr:
 tetrimone_i: 
-.2byte 0b0000
-.2byte 0b1111
-.2byte 0b0000
-.2byte 0b0000
+.4byte 0b00000
+.4byte 0b11110
+.4byte 0b00000
+.4byte 0b00000
 .byte 12, 0, 4
+.balign 4
 tetrimone_j: 
-.2byte 0b1000
-.2byte 0b1110
-.2byte 0b0000
-.2byte 0b0000
+.4byte 0b10000
+.4byte 0b11100
+.4byte 0b00000
+.4byte 0b00000
 .byte 12, 0, 3
+.balign 4
 tetrimone_l: 
-.2byte 0b0010
-.2byte 0b1110
-.2byte 0b0000
-.2byte 0b0000
+.4byte 0b00100
+.4byte 0b11100
+.4byte 0b00000
+.4byte 0b00000
 .byte 12, 0, 3
+.balign 4
 tetrimone_o: 
-.2byte 0b0110
-.2byte 0b0110
-.2byte 0b0000
-.2byte 0b0000
+.4byte 0b01100
+.4byte 0b01100
+.4byte 0b00000
+.4byte 0b00000
 .byte 12, 0, 4
+.balign 4
 tetrimone_s: 
-.2byte 0b0110
-.2byte 0b1100
-.2byte 0b0000
-.2byte 0b0000
+.4byte 0b01100
+.4byte 0b11000
+.4byte 0b00000
+.4byte 0b00000
 .byte 12, 0, 3
+.balign 4
 tetrimone_t: 
-.2byte 0b0100
-.2byte 0b1110
-.2byte 0b0000
-.2byte 0b0000
+.4byte 0b01000
+.4byte 0b11100
+.4byte 0b00000
+.4byte 0b00000
 .byte 12, 0, 3
+.balign 4
 tetrimone_z: 
-.2byte 0b1100
-.2byte 0b0110
-.2byte 0b0000
-.2byte 0b0000
+.4byte 0b11000
+.4byte 0b01100
+.4byte 0b00000
+.4byte 0b00000
 .byte 12, 0, 3
+.balign 4
 tetrimone_z2: 
-.2byte 0b1100
-.2byte 0b0110
-.2byte 0b0000
-.2byte 0b0000
+.4byte 0b11000
+.4byte 0b01100
+.4byte 0b00000
+.4byte 0b00000
 .byte 12, 0, 3
 current_swap: .byte 0
 .equ TETRIMONE_ARR_SIZE, .-tetrimone_arr
 
+.balign 4
 swap_tetrimone:
 .skip TETRIMONE_SIZE * SWAP_NUM
 
@@ -153,7 +162,7 @@ clear_tetrimone:
 _clear_tetrimone_loop:
     subs r1, r1, #1
     lsls r2, r1, #1
-    strh r3, [r0, r2]
+    str r3, [r0, r2]
     cmp r1, #0
     bne _clear_tetrimone_loop
     pop {r1-r3, pc}
@@ -175,10 +184,10 @@ _rotate_right_loop:
     movs r4, #16
     subs r4, r3
     subs r4, r2
-    lsls r5, #1
+    lsls r5, #2
     adds r5, #TETRIMONE_MATRIX
     @r2 - row
-    ldrh r2, [r1, r5]
+    ldr r2, [r1, r5]
     lsrs r2, r4
     @r5 inner loop iterator
     eors r5, r5
@@ -187,11 +196,11 @@ _rotate_right_inner_loop:
     @r5 tetrimone x
     ldrb r5, [r1, #TETRIMONE_X]
     @r4 shift value
-    movs r4, #16
+    movs r4, #17
     subs r4, r3
     subs r4, r5
     @r5 bit value
-    movs r5, #1
+    movs r5, #(1 << 1)
     ands r5, r2, r5
     ldr r6, [sp, #4]
     adds r4, r6
@@ -199,11 +208,11 @@ _rotate_right_inner_loop:
     ldr r4, [sp, #0]
     subs r4, r3, r4
     subs r4, #1
-    lsls r4, #1
+    lsls r4, #2
     adds r4, #TETRIMONE_MATRIX
-    ldrh r6, [r0, r4]
+    ldr r6, [r0, r4]
     orrs r5, r6
-    strh r5, [r0, r4]
+    str r5, [r0, r4]
     lsrs r2, #1
     pop {r5}
     adds r5, #1
@@ -233,10 +242,10 @@ _rotate_left_loop:
     movs r4, #16
     subs r4, r3
     subs r4, r2
-    lsls r5, #1
+    lsls r5, #2
     adds r5, #TETRIMONE_MATRIX
     @r2 - row
-    ldrh r2, [r1, r5]
+    ldr r2, [r1, r5]
     lsrs r2, r4
     @r5 inner loop iterator
     eors r5, r5
@@ -245,20 +254,20 @@ _rotate_left_inner_loop:
     @r5 tetrimone x
     ldrb r5, [r1, #TETRIMONE_X]
     @r4 shift value
-    movs r4, #15
+    movs r4, #16
     subs r4, r5
     @r5 bit value
-    movs r5, #1
+    movs r5, #(1 << 1)
     ands r5, r2, r5
     ldr r6, [sp, #4]
     subs r4, r6
     lsls r5, r4
     ldr r4, [sp, #0]
-    lsls r4, #1
+    lsls r4, #2
     adds r4, #TETRIMONE_MATRIX
-    ldrh r6, [r0, r4]
+    ldr r6, [r0, r4]
     orrs r5, r6
-    strh r5, [r0, r4]
+    str r5, [r0, r4]
     lsrs r2, #1
     pop {r5}
     adds r5, #1
@@ -282,9 +291,9 @@ shift_right:
     @r3 - iterator
     eors r3, r3
 _shift_right_loop_start:
-    ldrh r2, [r0, r3]
+    ldr r2, [r0, r3]
     lsrs r2, #1
-    strh r2, [r0, r3]
+    str r2, [r0, r3]
     adds r3, 2
     cmp r3, r1
     blt _shift_right_loop_start
@@ -302,9 +311,9 @@ shift_left:
     @r3 - iterator
     eors r3, r3
 _shift_left_loop_start:
-    ldrh r2, [r0, r3]
+    ldr r2, [r0, r3]
     lsls r2, #1
-    strh r2, [r0, r3]
+    str r2, [r0, r3]
     adds r3, 2
     cmp r3, r1
     blt _shift_left_loop_start
