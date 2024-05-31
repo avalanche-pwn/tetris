@@ -21,7 +21,7 @@ extern void shift_right(uint8_t *tetrimone);
 extern void sift_down(uint8_t *tetrimone);
 extern void display(uint8_t *tetrimone);
 extern void deapply(uint8_t *tetrimone);
-extern void check_colliding(uint8_t *tetrimone);
+extern void check_collisions(uint8_t *tetrimone);
 
 #define BUTTON_GPIO 2
 
@@ -41,11 +41,9 @@ int main() {
   initUart();
   uint8_t *t = get_tetrimone();
   // // display(t);
-  display(t);
-  t = rotate_right(t);
-  // t = rotate_left(t);
-  // shift_right(t);
-  // shift_right(t);
-  // check_colliding(t);
-  display(t);
+  while (true) {
+      shift_right(t);
+      check_collisions(t);
+      display(t);
+  }
 }

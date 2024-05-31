@@ -13,6 +13,7 @@ map:
 .global apply
 .global deapply
 .global display
+.global check_collisions
 .section .text
 apply:
     @r0 - tetrimone to apply
@@ -97,3 +98,33 @@ _display_loop:
     pop {r0}
     bl deapply
     pop {r1-r3, pc}
+
+check_collisions:
+    @r0 - current tetrimone
+    push {r0-r5, lr}
+    @r1 - tetrimone width
+    @r2 - tetrimone_y
+    ldrb r1, [r0, #TETRIMONE_WIDTH]
+    ldrb r2, [r0, #TETRIMONE_Y]
+    @r1 - 2x tetrimone_width
+    adds r2, r1
+    lsls r2, #2
+    lsls r1, #2
+    adds r0, #TETRIMONE_MATRIX
+_check_collisions_loop:
+    subs r1, #4
+    subs r2, #4
+    @r3 - current tetrimone row
+    ldr r3, [r0, r1]
+    @r4 - map addr
+    ldr r4, =map
+    @r5 - current map row
+    ldr r5, [r4, r2]
+    ands r5, r3
+    bne _check_collisions_ret
+    cmp r1, #0
+    bne _check_collisions_loop
+    pop {r0-r5, pc}
+_check_collisions_ret:
+    movs r0, r5
+    pop {r0-r5, pc}

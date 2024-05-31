@@ -294,7 +294,7 @@ _shift_right_loop_start:
     ldr r2, [r0, r3]
     lsrs r2, #1
     str r2, [r0, r3]
-    adds r3, 2
+    adds r3, 4
     cmp r3, r1
     blt _shift_right_loop_start
     pop {r0-r3, pc}
@@ -314,7 +314,7 @@ _shift_left_loop_start:
     ldr r2, [r0, r3]
     lsls r2, #1
     str r2, [r0, r3]
-    adds r3, 2
+    adds r3, 4
     cmp r3, r1
     blt _shift_left_loop_start
     pop {r0-r3, pc}
