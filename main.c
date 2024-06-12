@@ -16,24 +16,21 @@ extern void enable_rosc();
 extern uint8_t *get_tetrimone();
 extern uint8_t *rotate_right(uint8_t *tetrimone);
 extern uint8_t *rotate_left(uint8_t *tetrimone);
-extern void shift_left(uint8_t *tetrimone);
-extern void shift_right(uint8_t *tetrimone);
-extern void sift_down(uint8_t *tetrimone);
+extern void check_shift_left(uint8_t *tetrimone);
+extern void check_shift_right(uint8_t *tetrimone);
+extern void check_sift_down(uint8_t *tetrimone);
 extern void display(uint8_t *tetrimone);
 extern void deapply(uint8_t *tetrimone);
 extern void check_collisions(uint8_t *tetrimone);
+extern void init_gpio_pullup(int gpio);
+extern int gpio_read(int gpio);
 
 #define BUTTON_GPIO 2
 
 int main() {
-  gpio_init(BUTTON_GPIO);
-  gpio_set_dir(BUTTON_GPIO, GPIO_IN);
-  // We are using the button to pull down to 0v when pressed, so ensure that
-  // when unpressed, it uses internal pull ups. Otherwise when unpressed, the
-  // input will be floating.
-  gpio_pull_up(BUTTON_GPIO);
-  while (gpio_get(BUTTON_GPIO)) {
-  };
+  init_gpio_pullup(BUTTON_GPIO);
+
+  while (gpio_read(BUTTON_GPIO));
   // // gpio_init(25);
   // gpio_set_dir(25, GPIO_OUT);
   // gpio_put(25, 1);
@@ -42,8 +39,7 @@ int main() {
   uint8_t *t = get_tetrimone();
   // // display(t);
   while (true) {
-      shift_right(t);
-      check_collisions(t);
-      display(t);
+    check_shift_left(t);
+    display(t);
   }
 }

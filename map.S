@@ -97,6 +97,12 @@ _display_loop:
     blt _display_loop
     pop {r0}
     bl deapply
+    movs r1, #4
+_display_msg_flush:
+    movs r0, #0xff
+    bl serial_write
+    subs r1, #1
+    bne _display_msg_flush
     pop {r1-r3, pc}
 
 check_collisions:
@@ -126,5 +132,6 @@ _check_collisions_loop:
     bne _check_collisions_loop
     pop {r0-r5, pc}
 _check_collisions_ret:
+    pop {r0}
     movs r0, r5
-    pop {r0-r5, pc}
+    pop {r1-r5, pc}

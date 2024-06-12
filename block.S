@@ -86,6 +86,11 @@ swap_tetrimone:
 .global shift_right
 .global shift_left
 .global sift_down
+.global check_sift_down
+.global check_shift_right
+.global check_shift_left
+.global check_rotate_left
+.global check_rotate_right
 .section .text
 _swap_reset:
     eors r2, r2
@@ -286,7 +291,7 @@ shift_right:
     adds r1, #1
     strb r1, [r0, #TETRIMONE_X]
     ldrb r1, [r0, #TETRIMONE_WIDTH]
-    lsls r1, #1
+    lsls r1, #2
     adds r0, #TETRIMONE_MATRIX
     @r3 - iterator
     eors r3, r3
@@ -306,7 +311,7 @@ shift_left:
     subs r1, #1
     strb r1, [r0, #TETRIMONE_X]
     ldrb r1, [r0, #TETRIMONE_WIDTH]
-    lsls r1, #1
+    lsls r1, #2
     adds r0, #TETRIMONE_MATRIX
     @r3 - iterator
     eors r3, r3
@@ -320,8 +325,72 @@ _shift_left_loop_start:
     pop {r0-r3, pc}
 
 sift_down:
-    push {r1, lr}
+    push {r0-r1, lr}
     ldrb r1, [r0, #TETRIMONE_Y]
     adds r1, 1
     strb r1, [r0, #TETRIMONE_Y]
-    pop {r1, pc}
+    pop {r0-r1, pc}
+
+check_sift_down:
+    @r0 - tetrimone
+    push {r1-r2, lr}
+    bl sift_down
+    movs r2, r0
+    bl check_collisions
+    beq _check_sift_down_ret
+    ldrb r1, [r2, #TETRIMONE_Y]
+    subs r1, 1
+    strb r1, [r2, #TETRIMONE_Y]
+_check_sift_down_ret:
+    pop {r1-r2, pc}
+
+check_shift_right:
+    @r0 - tetrimone
+    push {r1-r2, lr}
+    bl shift_right
+    movs r2, r0
+    bl check_collisions
+    beq _check_shift_right_ret
+    movs r1, r0
+    movs r0, r2
+    bl shift_left
+    movs r0, r2
+_check_shift_right_ret:
+    pop {r1-r2, pc}
+
+
+check_shift_left:
+    @r0 - tetrimone
+    push {r1-r2, lr}
+    bl shift_left
+    movs r2, r0
+    bl check_collisions
+    beq _check_shift_left_ret
+    movs r1, r0
+    movs r0, r2
+    bl shift_right
+    movs r0, r2
+_check_shift_left_ret:
+    pop {r1-r2, pc}
+
+check_rotate_right:
+    push {r1-r2, lr}
+    bl rotate_right
+    movs r2, r0
+    bl check_collisions
+    beq _check_rotate_right_ret
+    movs r0, r2
+    bl get_swap
+_check_rotate_right_ret:
+    pop {r1-r2, pc}
+
+check_rotate_left:
+    push {r1-r2, lr}
+    bl rotate_left
+    movs r2, r0
+    bl check_collisions
+    beq _check_rotate_left_ret
+    movs r0, r2
+    bl get_swap
+_check_rotate_left_ret:
+    pop {r1-r2, pc}
