@@ -8,12 +8,13 @@ map:
 .fill 32, 4, 0x20001
 .word 0x3ffff
 .word 0x3ffff
-.equ MAP_SIZE, .-map
+.equ MAP_SIZE, .-map-8
 
 .global apply
 .global deapply
 .global display
 .global check_collisions
+.global remove_rows
 .section .text
 apply:
     @r0 - tetrimone to apply
@@ -93,16 +94,18 @@ _display_loop:
     bl serial_write
     adds r1, #4
     @substract 8 to ignore bottom border
-    cmp r1, #(MAP_SIZE - 8)
+    cmp r1, #MAP_SIZE
     blt _display_loop
-    pop {r0}
-    bl deapply
-    movs r1, #4
+    movs r1, #7
 _display_msg_flush:
     movs r0, #0xff
     bl serial_write
     subs r1, #1
     bne _display_msg_flush
+    movs r0, #0xfa
+    bl serial_write
+    pop {r0}
+    bl deapply
     pop {r1-r3, pc}
 
 check_collisions:
@@ -135,3 +138,51 @@ _check_collisions_ret:
     pop {r0}
     movs r0, r5
     pop {r1-r5, pc}
+
+remove_rows:
+    push {r4-r6, lr}
+    @r0 - applied tetrimone
+    ldrb r1, [r0, #TETRIMONE_WIDTH]
+    ldrb r2, [r0, #TETRIMONE_Y]
+    adds r1, r2
+    lsls r1, #2
+    movs r2, #(MAP_SIZE-4)
+    cmp r1, r2
+    ble _remove_rows_skip_size_swap
+    movs r1, r2
+_remove_rows_skip_size_swap:
+    eors r3, r3
+    @r3 - num removed_rows
+_remove_rows_loop:
+    movs r6, #4
+    push {r1}
+_remove_rows_count_del:
+    ldr r4, =map
+    ldr r2, [r4, r1]
+    ldr r5, =0x3ffff
+    cmp r2, r5
+    bne _remove_rows_current_rows_move
+    adds r3, #1
+    movs r6, #0
+    subs r1, #4
+    b _remove_rows_count_del
+_remove_rows_current_rows_move:
+    pop {r1}
+    lsls r3, #2
+    subs r1, r3
+    cmp r1, #0
+    blt _remove_rows_clear
+    ldr r5, [r4, r1]
+    adds r1, r3
+    str r5, [r4, r1]
+_remove_rows_loop_end:
+    lsrs r3, #2
+    subs r1, r6
+    cmp r1, #0
+    bne _remove_rows_loop
+    pop {r4-r6, pc}
+_remove_rows_clear:
+    adds r1, r3
+    ldr r5, =0x20001
+    str r5, [r4, r1]
+    b _remove_rows_loop_end

@@ -146,7 +146,7 @@ _main_skip_released_ror_right:
     ldr r1, =TIMER_TIMERAWL
     ldr r2, [r1]
     subs r4, r2, r0
-    ldr r3, =#1000000
+    ldr r3, =#500000
     cmp r4, r3
     blo _main_skip_down_mov
     str r2, [sp, #time]
@@ -157,6 +157,7 @@ _main_skip_released_ror_right:
     beq _main_display_move_down
     ldr r0, [sp, #tetrimone]
     bl apply
+    bl remove_rows
     bl get_tetrimone
     str r0, [sp, #tetrimone]
 _main_display_move_down:
