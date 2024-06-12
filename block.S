@@ -189,6 +189,12 @@ _rotate_right_loop:
     movs r4, #16
     subs r4, r3
     subs r4, r2
+    cmp r4, #0
+    bge _rotate_right_neg_shift_skip
+    eors r0, r0
+    pop {r5}
+    pop {r1-r6, pc}
+_rotate_right_neg_shift_skip:
     lsls r5, #2
     adds r5, #TETRIMONE_MATRIX
     @r2 - row
@@ -247,6 +253,12 @@ _rotate_left_loop:
     movs r4, #16
     subs r4, r3
     subs r4, r2
+    cmp r4, #0
+    bge _rotate_left_neg_shift_skip
+    eors r0, r0
+    pop {r5}
+    pop {r1-r6, pc}
+_rotate_left_neg_shift_skip:
     lsls r5, #2
     adds r5, #TETRIMONE_MATRIX
     @r2 - row
@@ -375,10 +387,15 @@ _check_shift_left_ret:
 
 check_rotate_right:
     push {r1-r2, lr}
+    movs r2, r0
     bl rotate_right
+    cmp r0, #0
+    beq _check_rotate_right_failed
     movs r2, r0
     bl check_collisions
+    cmp r0, r2
     beq _check_rotate_right_ret
+_check_rotate_right_failed:
     movs r0, r2
     bl get_swap
 _check_rotate_right_ret:
@@ -386,10 +403,15 @@ _check_rotate_right_ret:
 
 check_rotate_left:
     push {r1-r2, lr}
+    movs r2, r0
     bl rotate_left
+    cmp r0, #0
+    beq _check_rotate_left_failed
     movs r2, r0
     bl check_collisions
+    cmp r0, r2
     beq _check_rotate_left_ret
+_check_rotate_left_failed:
     movs r0, r2
     bl get_swap
 _check_rotate_left_ret:
