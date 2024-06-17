@@ -246,14 +246,3 @@ read_end:
     mov r0, r3
     pop {r0-r3, pc}
 
-serial_flush:
-    push {r0-r2, lr}
-
-    ldr r0, =UART_FR
-    ldr r1, [r0]
-    movs r2, #0x10
-    ands r1, r2 @ Check TXFE bit
-    cmp r1, #0x10
-    bne serial_flush
-
-    pop {r0-r2, pc}
