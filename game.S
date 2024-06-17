@@ -19,9 +19,10 @@ button_prev_state: .4byte 0xffffffff
 .thumb_func
 tetrimone=0
 time=4
+time_diff=12
 main:
     push {r4, lr}
-    sub sp, #8
+    sub sp, #12
     movs r0, #DTR_GPIO
     bl init_gpio_pullup
 _main_wait_usb:
@@ -48,6 +49,8 @@ _main_wait_usb:
     ldr r1, =TIMER_TIMERAWL
     ldr r1, [r1]
     str r1, [sp, #time]
+    ldr r1, =#500000
+    str r1, [sp, #time_diff]
 _main_loop:
 
     @check left_btn_clicked
@@ -174,7 +177,7 @@ _main_skip_released_soft_drop:
     ldr r1, =TIMER_TIMERAWL
     ldr r2, [r1]
     subs r4, r2, r0
-    ldr r3, =#500000
+    ldr r3, [sp, #time_diff]
     cmp r4, r3
     blo _main_skip_down_mov
     str r2, [sp, #time]
@@ -188,14 +191,17 @@ _main_skip_released_soft_drop:
     bl remove_rows
     bl get_tetrimone
     str r0, [sp, #tetrimone]
+    ldr r1, [sp, #time_diff]
+    ldr r0, =#10000
+    subs r1, r0
+    str r1, [sp, #time_diff]
+    ldr r0, [sp, #tetrimone]
 _main_check_endgame:
     bl check_collisions
     beq _main_display_move_down
-    ldr r0, [sp, #time]
-    ldr r1,=1000
-    subs r0, r1
-    str r0, [sp, #time]
     bl clear
+    ldr r1, =#500000
+    str r1, [sp, #time_diff]
 _main_display_move_down:
     ldr r0, [sp, #tetrimone]
     bl display
