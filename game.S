@@ -10,6 +10,7 @@
 .equ BTN_SHIFT_RIGHT, 4
 .equ BTN_ROTATE_LEFT, 5
 .equ BTN_ROTATE_RIGHT, 6
+.equ BTN_SOFT_DROP, 7
 
 button_prev_state: .4byte 0xffffffff
 
@@ -37,6 +38,8 @@ _main_wait_usb:
     ldr r0, =BTN_ROTATE_LEFT
     bl init_gpio_pullup
     ldr r0, =BTN_ROTATE_RIGHT
+    bl init_gpio_pullup
+    ldr r0, =BTN_SOFT_DROP
     bl init_gpio_pullup
     bl get_tetrimone
     str r0, [sp, #tetrimone]
@@ -139,6 +142,31 @@ _main_skip_released_ror_left:
     str r0, [sp, #tetrimone]
     bl display
 _main_skip_released_ror_right:
+    movs r0, #1
+    movs r1, #BTN_SOFT_DROP
+    lsls r0, r1
+    movs r4, r0
+    bl gpio_read
+    movs r2, r0
+
+    ldr r1, =button_prev_state
+    ldr r3, [r1]
+    movs r0, r4
+    ands r0, r3
+    cmp r0, r2
+    beq _main_skip_released_soft_drop
+    eors r3, r4
+    str r3, [r1]
+    cmp r2, #0
+    beq _main_skip_released_soft_drop
+    ldr r0, [sp, #tetrimone]
+    movs r1, r0
+    bl check_sift_down
+    cmp r0, r1
+    bne _main_skip_released_soft_drop
+    str r0, [sp, #tetrimone]
+    bl display
+_main_skip_released_soft_drop:
     
     @r0 - last time
     @r2 - current time
@@ -154,12 +182,20 @@ _main_skip_released_ror_right:
     movs r1, r0
     bl check_sift_down
     cmp r0, r1
-    beq _main_display_move_down
+    beq _main_check_endgame
     ldr r0, [sp, #tetrimone]
     bl apply
     bl remove_rows
     bl get_tetrimone
     str r0, [sp, #tetrimone]
+_main_check_endgame:
+    bl check_collisions
+    beq _main_display_move_down
+    ldr r0, [sp, #time]
+    ldr r1,=1000
+    subs r0, r1
+    str r0, [sp, #time]
+    bl clear
 _main_display_move_down:
     ldr r0, [sp, #tetrimone]
     bl display

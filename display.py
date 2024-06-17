@@ -16,7 +16,7 @@ class SerialRunnable(QRunnable):
         super().__init__()
 
     def run(self):
-        self.ser = serial.Serial('/dev/ttyUSB1', baudrate=9600, bytesize=8, stopbits=1, parity=serial.PARITY_NONE)
+        self.ser = serial.Serial('/dev/ttyUSB0', baudrate=9600, bytesize=8, stopbits=1, parity=serial.PARITY_NONE)
         while not self.kill.wait(0):
             l = self.ser.read_until(b"\xff\xff\xff\xff\xff\xff\xff\xfa")
             self.signals.received_frame.emit(l[:-8].rjust(64, b'\x00'))

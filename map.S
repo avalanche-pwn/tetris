@@ -15,6 +15,7 @@ map:
 .global display
 .global check_collisions
 .global remove_rows
+.global clear
 .section .text
 apply:
     @r0 - tetrimone to apply
@@ -42,6 +43,17 @@ _apply_loop:
     cmp r1, #0
     bne _apply_loop
     pop {r0-r5, pc}
+clear:
+    push {r0-r2, lr}
+    movs r0, #MAP_SIZE
+_clear_loop:
+    subs r0, #4
+    ldr r1, =0x20001
+    ldr r2, =map
+    str r1, [r2, r0]
+    cmp r0, #0
+    bne _clear_loop
+    pop {r0-r2, pc}
 
 deapply:
     @r0 - tetrimone to apply

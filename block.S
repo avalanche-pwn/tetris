@@ -17,60 +17,60 @@
 .balign 4
 tetrimone_arr:
 tetrimone_i: 
-.4byte 0b00000
-.4byte 0b11110
-.4byte 0b00000
-.4byte 0b00000
-.byte 12, 0, 4
+.4byte 0b00000000000
+.4byte 0b11110000000
+.4byte 0b00000000000
+.4byte 0b00000000000
+.byte 6, 0, 4
 .balign 4
 tetrimone_j: 
-.4byte 0b10000
-.4byte 0b11100
-.4byte 0b00000
-.4byte 0b00000
-.byte 12, 0, 3
+.4byte 0b10000000000
+.4byte 0b11100000000
+.4byte 0b00000000000
+.4byte 0b00000000000
+.byte 6, 0, 3
 .balign 4
 tetrimone_l: 
-.4byte 0b00100
-.4byte 0b11100
-.4byte 0b00000
-.4byte 0b00000
-.byte 12, 0, 3
+.4byte 0b00100000000
+.4byte 0b11100000000
+.4byte 0b00000000000
+.4byte 0b00000000000
+.byte 6, 0, 3
 .balign 4
 tetrimone_o: 
-.4byte 0b11000
-.4byte 0b11000
-.4byte 0b00000
-.4byte 0b00000
-.byte 12, 0, 2
+.4byte 0b1100000000
+.4byte 0b1100000000
+.4byte 0b0000000000
+.4byte 0b0000000000
+.byte 7, 0, 2
 .balign 4
 tetrimone_s: 
-.4byte 0b01100
-.4byte 0b11000
-.4byte 0b00000
-.4byte 0b00000
-.byte 12, 0, 3
+.4byte 0b01100000000
+.4byte 0b11000000000
+.4byte 0b00000000000
+.4byte 0b00000000000
+.byte 6, 0, 3
 .balign 4
 tetrimone_t: 
-.4byte 0b01000
-.4byte 0b11100
+.4byte 0b01000000000
+.4byte 0b11100000000
+.4byte 0b00000000000
 .4byte 0b00000
-.4byte 0b00000
-.byte 12, 0, 3
+.byte 6, 0, 3
 .balign 4
 tetrimone_z: 
-.4byte 0b11000
-.4byte 0b01100
-.4byte 0b00000
-.4byte 0b00000
-.byte 12, 0, 3
+.4byte 0b11000000000
+.4byte 0b01100000000
+.4byte 0b00000000000
+.4byte 0b00000000000
+.byte 6, 0, 3
 .balign 4
 tetrimone_z2: 
-.4byte 0b11000
-.4byte 0b01100
-.4byte 0b00000
-.4byte 0b00000
-.byte 12, 0, 3
+.4byte 0b11000000000
+.4byte 0b01100000000
+.4byte 0b00000000000
+.4byte 0b00000000000
+.byte 6, 0, 3
 current_swap: .byte 0
 .equ TETRIMONE_ARR_SIZE, .-tetrimone_arr
 
